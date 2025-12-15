@@ -1,0 +1,2 @@
+# hi_mama_homeassistant_activity_fetcher
+Something something something
