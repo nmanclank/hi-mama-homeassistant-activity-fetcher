@@ -1,0 +1,12 @@
+{
+  "domain": "himama_activities",
+  "name": "HiMama (Lillio) Activities",
+  "codeowners": [],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/nmanclank/hi-mama-homeassistant-activity-fetcher",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/nmanclank/hi-mama-homeassistant-activity-fetcher/issues",
+  "requirements": ["beautifulsoup4==4.12.3"],
+  "version": "0.1.0"
+}
