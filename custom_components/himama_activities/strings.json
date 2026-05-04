@@ -3,11 +3,17 @@
     "step": {
       "user": {
         "title": "HiMama Authentication",
-        "description": "Enter your HiMama email, password, and the Child ID. You can find the Child ID in the URL when viewing your child's reports on the HiMama website (e.g. `.../accounts/12345/reports` -> ID is 12345).",
+        "description": "Enter your HiMama email and password.",
         "data": {
           "email": "Email",
-          "password": "Password",
-          "child_id": "Child ID",
+          "password": "Password"
+        }
+      },
+      "select_kid": {
+        "title": "Select Child",
+        "description": "Select the child to monitor.",
+        "data": {
+          "kid": "Child",
           "update_interval": "Update Interval (minutes)"
         }
       }
@@ -15,7 +21,8 @@
     "error": {
       "invalid_auth": "Invalid authentication",
       "cannot_connect": "Failed to connect to HiMama",
-      "unknown": "Unexpected error occurred"
+      "unknown": "Unexpected error occurred",
+      "no_children_found": "No children found in your account"
     },
     "abort": {
       "already_configured": "Device is already configured"

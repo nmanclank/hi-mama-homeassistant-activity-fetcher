@@ -17,8 +17,12 @@ class HiMamaAuthError(Exception):
     """Authentication error."""
     pass
 
+class HiMamaNoChildrenError(Exception):
+    """No children found error."""
+    pass
+
 class HiMamaApi:
-    def __init__(self, session, email, password, child_id):
+    def __init__(self, session, email, password, child_id=None):
         self.session = session
         self.email = email
         self.password = password
@@ -51,6 +55,46 @@ class HiMamaApi:
             if isinstance(e, (HiMamaApiError, HiMamaAuthError)):
                 raise
             raise HiMamaApiError(f"Error during login: {e}")
+
+    async def async_get_kids(self):
+        """Fetch list of kids after login."""
+        try:
+            # Try to get the root page which should redirect to dashboard
+            async with self.session.get("https://www.himama.com/") as resp:
+                html = await resp.text()
+
+            soup = BeautifulSoup(html, "html.parser")
+            kids = []
+            seen_ids = set()
+
+            for a in soup.find_all('a', href=True):
+                href = a['href']
+                match = re.search(r'/accounts/(\d+)', href)
+                if match:
+                    child_id = match.group(1)
+                    if child_id not in seen_ids:
+                        name = a.get_text(strip=True)
+                        if not name:
+                            img = a.find('img')
+                            if img and img.get('alt'):
+                                name = img['alt']
+                            else:
+                                name = f"Child {child_id}"
+                        
+                        if name.lower() in ["reports", "profile", "messages", "attendance"]:
+                            name = f"Child {child_id}"
+                            
+                        seen_ids.add(child_id)
+                        kids.append({"id": child_id, "name": name})
+
+            if not kids:
+                raise HiMamaNoChildrenError("No children found")
+
+            return kids
+        except Exception as e:
+            if isinstance(e, HiMamaNoChildrenError):
+                raise
+            raise HiMamaApiError(f"Error getting kids: {e}")
 
     async def async_get_activities(self):
         """Get latest activities for the child."""

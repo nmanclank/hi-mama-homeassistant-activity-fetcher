@@ -7,6 +7,7 @@ This is a custom integration for Home Assistant to display the latest activities
 - **Fetches Daily Activities:** Retrieves the latest activities for a selected child from the HiMama reports page.
 - **Real-time Sensor:** Creates a sensor entity in Home Assistant for the most recent activity. The sensor's state is the title of the latest activity (e.g., "Meals", "Naps").
 - **Detailed Attributes:** Stores all activities from the latest report in the sensor's attributes.
+- **Auto-Discovery:** Automatically detects children associated with your account, so you don't need to manually find their IDs.
 
 ## Installation
 
@@ -29,13 +30,13 @@ This is a custom integration for Home Assistant to display the latest activities
 
 1. Go to Settings > Devices & Services.
 2. Click Add Integration and search for "HiMama Activities".
-3. Enter your HiMama email, password, and the **Child ID**.
-    - *How to find Child ID:* Log in to HiMama in your browser, go to your child's profile/reports. The URL will look like `https://www.himama.com/accounts/12345/reports`. The Child ID is the number (`12345`).
-4. A new sensor will be created for the selected child.
+3. Enter your HiMama email and password.
+4. The integration will fetch the list of children from your account. Select the child you want to monitor from the dropdown.
+5. A new sensor will be created for the selected child. If you want to monitor multiple children, add the integration again for each child.
 
 ## Sensor Usage
 
-The integration creates a sensor named `sensor.himama_child_<id>_latest_activity`.
+The integration creates a sensor named `sensor.<child_name>_latest_activity`.
 
 - **State:** The state of the sensor will be the title of the most recent activity (e.g., "Naps").
 - **Attributes:** The sensor's attributes contain a list of activities. Each activity is a dictionary with the following keys:

@@ -11,18 +11,20 @@ async def async_setup_entry(hass, entry, async_add_entities):
     """Set up the sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
     child_id = entry.data["child_id"]
+    child_name = entry.data.get("child_name", f"Child {child_id}")
     
-    async_add_entities([HiMamaActivitySensor(coordinator, child_id)])
+    async_add_entities([HiMamaActivitySensor(coordinator, child_id, child_name)])
 
 
 class HiMamaActivitySensor(CoordinatorEntity):
     """Representation of a HiMama Activity Sensor."""
 
-    def __init__(self, coordinator, child_id):
+    def __init__(self, coordinator, child_id, child_name):
         """Initialize the sensor."""
         super().__init__(coordinator)
         self._child_id = child_id
-        self._attr_name = f"HiMama Child {child_id} Latest Activity"
+        self._child_name = child_name
+        self._attr_name = f"{child_name} Latest Activity"
         self._attr_unique_id = f"himama_{child_id}_latest_activity"
         self._attr_icon = "mdi:child-toy"
 
@@ -46,7 +48,7 @@ class HiMamaActivitySensor(CoordinatorEntity):
         """Return device information about this entity."""
         return {
             "identifiers": {(DOMAIN, self._child_id)},
-            "name": f"HiMama Child {self._child_id}",
+            "name": self._child_name,
             "manufacturer": "HiMama",
             "model": "Activity Feed"
         }
